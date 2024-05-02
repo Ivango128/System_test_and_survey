@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+
+{% block title %}
+Главная страница
+{% endblock %}
+
+
+{% block body %}
+<div class="contener_center_center">
+    <div class="contener_authorized">
+    <form method="post" class="form__authorized">
+    <div class="contener_column_line">
+        <h3 class="title">Введите ваш логин</h3>
+        <input type="text" class="form-control" name="login" placeholder="login" required>
+    </div>
+    <div class="contener_column_line">
+        <h3 class="title">Введите ваш пароль</h3>
+        <input type="password" class="form-control" name="password" placeholder="password" minlength="8" required>
+    </div>
+    <div class="center_line">
+        <input type="submit" class="btn btn-primary btn-submit" value="Войти">
+    </div>
+    </form>
+        {% block dialog %} {% endblock %}
+    </div>
+</div>
+<script src="/static/js/hidden_header.js"></script>
+{% endblock %}

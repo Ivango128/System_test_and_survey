@@ -1,0 +1,37 @@
+{% extends 'main.html' %}
+
+{% block title %}
+Главная страница
+{% endblock %}
+
+
+{% block body %}
+<div class="cont__title__create">
+    <div class="cont__title__answer">
+        <h1 class="title__create">Список интервьюеров</h1>
+    </div>
+</div>
+<div class="cont__for__questions">
+    <form method="post" class="form__question">
+        <div class="block__answers">
+            <div class="cont__for__answers">
+            {% for interviewer in interviewers %}
+                <div class="input-group {{interviewer.idi_nterviewer}}">
+                <div class="input-group-text">
+                    <p class="number">{{interviewer.idi_nterviewer}}</p>
+                </div>
+                <input type="text" class="form-control" name="{{interviewer.idi_nterviewer}}" id="inter_{{interviewer.idi_nterviewer}}" value="{{interviewer.login}}">
+                <input type="text" class="form-control" name="{{interviewer.idi_nterviewer}}" id="inter_{{interviewer.idi_nterviewer}}" value="{{interviewer.password}}">
+                </div>
+            {% endfor %}
+            </div>
+            <div class="for__answer__plus__btn">
+                <div class="btn btn__plus" id="plus_answer"><img src="/static/src/plus.png" alt="Добавить вопрос"></div>
+                <label for="plus_answer">Добавить нового пользователя</label>
+            </div>
+        </div>
+        <input type="submit" name="{{ id }}" class="btn btn-primary btn__create" value="Сохранить">
+    </form>
+</div>
+
+{% endblock %}

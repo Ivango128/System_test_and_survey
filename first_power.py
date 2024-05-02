@@ -8,6 +8,7 @@ def laad_dotenv_first_power():
     user_bd = os.getenv('user')
     password_bd = os.getenv('password')
     dbname_bd = os.getenv('db_name')
+    password_admin = os.getenv('password_admin')
     if host_bd is None:
         host_bd = 'localhost'
     if port_bd is None:
@@ -18,7 +19,7 @@ def laad_dotenv_first_power():
         password_bd = 'password'
     if dbname_bd is None:
         dbname_bd = 'mydb'
-    return host_bd, port_bd, user_bd, password_bd, dbname_bd
+    return host_bd, port_bd, user_bd, password_bd, dbname_bd, password_admin
 def load_dotenv_SK():
     load_dotenv()
     return os.getenv('seceretKey')

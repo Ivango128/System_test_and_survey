@@ -13,7 +13,7 @@
             <button class="btn btn-outline-secondary btn__main" type="button">Группы</button>
             <button class="btn btn-outline-secondary btn__main" type="button">Назанчить тестирование</button>
             <button class="btn btn-outline-secondary btn__main" type="button">Показать статистику</button>
-            <button class="btn btn-outline-secondary btn__main" type="button">Сгенерировать отчет</button>
+            <a href="{{ url_for('create_report') }}"><button class="btn btn-outline-secondary btn__main" type="button">Сгенерировать отчеты</button></a>
         </div>
     </div>
 {% endblock %}

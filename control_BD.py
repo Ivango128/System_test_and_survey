@@ -1,6 +1,7 @@
-import pymysql
-class MyDB():
-    def __init__(self, host='localhost', port=3036, user='user', password='mypassword', dbname='mydb'):
+import psycopg2
+
+class MyBD():
+    def __init__(self, host='localhost', port=5432, user='user', password='mypassword', dbname='mydb'):
         self.host = host
         self.port = int(port)
         self.user = user
@@ -10,17 +11,64 @@ class MyDB():
 
     def connect_myBD(self):
         try:
-            self.connection = pymysql.connect(
+            self.connection = psycopg2.connect(
                 host=self.host,
                 port=self.port,
                 user=self.user,
                 password=self.password,
-                database=self.dbname,
-                cursorclass=pymysql.cursors.DictCursor
+                dbname=self.dbname,
                 )
             print("Connection successful ...")
-        except Exception as e:
+        except psycopg2.Error as e:
             print("Connection error:", e)
+
+    def connect_close(self):
+        self.connection.close()
+
+    def get_password_for_login(self, login):
+        try:
+            with self.connection.cursor() as cursor:
+                self.insert_query = "SELECT password " \
+                                    "FROM interviewer " \
+                                    "WHERE login = (%s);"
+
+                cursor.execute(self.insert_query, (login,))
+                password = cursor.fetchone()[0]
+
+        except Exception as e:
+            print("Failed to:", e)
+            print("Connection closed ...")
+            return False
+
+        else:
+            self.connect_close()
+            print("Successfully inserted")
+            print("Connection closed ...")
+            print(password)
+            return password
+    def get_interviewer_all(self):
+        self.connect_myBD()
+        try:
+            with self.connection.cursor() as cursor:
+
+                self.insert_query = "SELECT * " \
+                                    "FROM `interviewer`;"
+
+                cursor.execute(self.insert_query)
+                table = cursor.fetchall()
+
+
+
+        except Exception as e:
+            print("Failed to:", e)
+            print("Connection closed ...")
+            return False
+
+        else:
+            self.connection.close()
+            print("Successfully inserted")
+            print("Connection closed ...")
+            return table
 
     def save_title_quiz(self, title, description, type):
         self.connect_myBD()
@@ -68,16 +116,16 @@ class MyDB():
             print("Connection closed ...")
             return True
 
-    def get_answers_id(self, answers_options, number_right_answers, right_answer):
+    def get_answers_id(self, answers_options, number_right_answers, right_answer): # переписать
         self.connect_myBD()
         try:
             with self.connection.cursor() as cursor:
 
                 self.insert_query = "SELECT id_answers" \
                                     "FROM testing_system.answers" \
-                                    f"WHERE JSON_CONTAINS(`answers_options`, {answers_options})" \
-                                    f"AND JSON_CONTAINS(`number_right_answers`, {number_right_answers})" \
-                                    f"AND `right_answer` = {right_answer};"
+                                    f"WHERE JSON_CONTAINS(`answers_options`, (%s))" \
+                                    f"AND JSON_CONTAINS(`number_right_answers`, (%s))" \
+                                    f"AND `right_answer` = (%s);"
 
                 cursor.execute(self.insert_query, (answers_options, number_right_answers, right_answer))
                 id_answer = cursor.fetchone()
@@ -95,7 +143,7 @@ class MyDB():
             return id_answer
 
 
-    def save_one_question(self, tittle, is_closed, name_question, answers_options, number_right_answers, right_answer):
+    def save_one_question(self, tittle, is_closed, name_question, answers_options, number_right_answers, right_answer): # переписать
         self.connect_myBD()
         self.save_answers_options(name_question, answers_options, number_right_answers)
         id_answer = self.get_answers_id(name_question, answers_options, number_right_answers)
@@ -106,7 +154,7 @@ class MyDB():
                 self.insert_query_title_test = "INSERT INTO `test_questions` (is_closed, name_queshtion) " \
                                           f"VALUES (%s, %s, %s);"
 
-                cursor.execute(self.insert_query_title_test, (title, description, type))
+                cursor.execute(self.insert_query_title_test, (None, None, type))
                 self.connection.commit()
 
 
@@ -120,3 +168,4 @@ class MyDB():
             print("Successfully inserted")
             print("Connection closed ...")
             return True
+
