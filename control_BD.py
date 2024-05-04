@@ -7,6 +7,7 @@ class MyBD():
         self.user = user
         self.password = password
         self.dbname = dbname
+        self.check_and_insert_answer = 'check_and_insert_answer'
         self.connect_myBD()
 
     def connect_myBD(self):
@@ -75,7 +76,7 @@ class MyBD():
         try:
             with self.connection.cursor() as cursor:
 
-                self.insert_query_title_test = "INSERT INTO `quizzes_all` (title, description, type) " \
+                self.insert_query_title_test = "INSERT INTO quizzes_all (title, description, type) " \
                                           f"VALUES (%s, %s, %s);"
 
                 cursor.execute(self.insert_query_title_test, (title, description, type))
@@ -98,12 +99,9 @@ class MyBD():
         try:
             with self.connection.cursor() as cursor:
 
-                self.insert_query = "INSERT INTO `answers` (answers_options, number_right_answers, right_answer) " \
-                                               f"VALUES (%s, %s, %s);"
-
-                cursor.execute(self.insert_query, (answers_options, number_right_answers, right_answer))
+                cursor.callproc(self.check_and_insert_answer, (answers_options, number_right_answers, right_answer))
+                result = cursor.fetchone()[0]
                 self.connection.commit()
-
 
         except Exception as e:
             print("Failed to:", e)
@@ -114,7 +112,7 @@ class MyBD():
             self.connection.close()
             print("Successfully inserted")
             print("Connection closed ...")
-            return True
+            return result
 
     def get_answers_id(self, answers_options, number_right_answers, right_answer): # переписать
         self.connect_myBD()

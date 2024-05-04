@@ -51,7 +51,7 @@ def quit():
 @app.route('/create-report/<report>')
 def get_report(report):
     #report_file_pdf = 'reports/'+report
-    print(report)
+    #print(report)
     return send_from_directory(directory='reports', path=report)
 
 @app.route('/create-test', methods=['POST', 'GET'])
@@ -61,7 +61,7 @@ def create_test():
         description_test = request.form['input__description__create__quiz']
         #session["curent_test"] = 1
         isTitleInBD = my_bd.save_title_quiz(title_test, description_test, 'test')
-        print(request.form.to_dict())
+        #print(request.form.to_dict())
         if isTitleInBD:
             return redirect(url_for('questions_test_create', title_test=title_test, id=1))
         else:
@@ -73,10 +73,67 @@ def create_test():
 @app.route('/create-test/questions<title_test>/<int:id>', methods=['POST', 'GET'])
 def questions_test_create(title_test, id):
     if request.method == "POST":
-        session['id_questions'] +=1
-        return render_template('questions-test.html', title_test=title_test, id=session['id_questions'])
+        id_question = session['id_questions']
+        question_data = request.form.to_dict()
+        print(question_data)
+        question_from_data = question_data['question']
+        id_question_from_data = -1
+        is_one_list_from_data = False
+        is_closed_question_from_data = False
+        right_answer_from_data = 'NoN'
+        numbers_right_answer_from_data = [-1]
+        answer_options_from_data = ['NoN']
+
+        if question_data['is_closed_question'] == 'True':
+            is_closed_question_from_data = True
+            numbers_right_answer_from_data.clear()
+            answer_options_from_data.clear()
+        else:
+            is_closed_question_from_data = False
+            right_answer_from_data = question_data['right_answer']
+
+        for key in question_data:
+
+            if is_closed_question_from_data:
+
+                if question_data['is_one_list'] == 'True':
+                    is_one_list_from_data = True
+                else:
+                    is_one_list_from_data = False
+
+                if 'right_answer' in key and is_one_list_from_data:
+                    print('work!')
+                    numbers_right_answer_from_data.append(int(question_data['right_answer']))
+                if 'right_answer' in key and not is_one_list_from_data:
+                    numbers_right_answer_from_data.append(int(key.split('/')[1]))
+
+                if 'answer' in key and not ('right_answer' in key):
+                    answer_options_from_data.append(question_data[key])
+
+            if 'id_question' in key:
+                id_question_from_data = int(key.split('/')[1])
+
+
+
+        print(id_question_from_data, id_question)
+        if id_question_from_data == id_question:
+            session['id_questions'] +=1
+            print('Вопрос:', question_from_data)
+            print('Закрытый:', is_closed_question_from_data)
+            print('Один верный:', is_one_list_from_data)
+            print('Номера верных:', numbers_right_answer_from_data)
+            print('Варианты ответов', answer_options_from_data)
+            print('Один правельный:', right_answer_from_data)
+
+            id_answers_from_bd = my_bd.save_answers_options(answer_options_from_data, numbers_right_answer_from_data, right_answer_from_data)
+            print(id_answers_from_bd)
+
+            return redirect(url_for('questions_test_create', title_test=title_test, id=session['id_questions']))
+        else:
+            print('Error ...')
+            return redirect(url_for('questions_test_create', title_test=title_test, id=session['id_questions']))
     else:
-        session['id_questions'] = 1
+        session['id_questions'] = id
         return render_template('questions-test.html', title_test=title_test, id=session['id_questions'])
 
 if __name__ == '__main__':

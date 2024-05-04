@@ -15,18 +15,18 @@
 <div class="cont__for__questions">
     <form method="post" class="form__question">
         <div class="fist_line">
-            <textarea name="question" id="question" class="input__name__question" placeholder="Вопрос {{id}}"></textarea>
+            <textarea name="question" id="question" class="input__name__question" placeholder="Вопрос {{id}}" required></textarea>
             <div class="element__radio__for__form">
                 <div class="cont__radio">
-                    <input type="radio" class="form__radio_btn" name="is_closed_question" id="closed_question" value="closed_question" checked>
+                    <input type="radio" class="form__radio_btn" name="is_closed_question" id="closed_question" value="True" checked>
                     <label for="closed_question">Закрытый&nbspвопрос</label>
-                    <input type="radio" class="form__radio_btn" name="is_closed_question" id="open_question" value="open_question">
+                    <input type="radio" class="form__radio_btn" name="is_closed_question" id="open_question" value="False">
                     <label for="open_question">Открытый&nbspвопрос</label>
                 </div>
-                <div class="cont__radio" id="two_group_radio">
-                    <input type="radio" class="form__radio_btn" name="is_one_list" id="one_list" value="one_list" checked>
+                <div class="cont__radio cont__radio__hiden" id="two_group_radio">
+                    <input type="radio" class="form__radio_btn" name="is_one_list" id="one_list" value="True" checked>
                     <label for="one_list">Один&nbspправельный</label>
-                    <input type="radio" class="form__radio_btn" name="is_one_list" id="any_list" value="any_list">
+                    <input type="radio" class="form__radio_btn" name="is_one_list" id="any_list" value="False">
                     <label for="one_list">Несколько&nbspправельных</label>
                 </div>
             </div>
@@ -45,7 +45,7 @@
         <div class="block__one__answer hidden">
             <input type="text" id="one_answer" name="right_answer" placeholder="Введите правельный ответ" class="input__title__create">
         </div>
-        <input type="submit" name="{{ id }}" class="btn btn-primary btn__create" value="Следующий вопрос">
+        <input type="submit" name="id_question/{{ id }}" class="btn btn-primary btn__create sub" value="Следующий вопрос">
     </form>
 </div>
 

@@ -167,7 +167,8 @@ img {
 }
 
 .btn__create{
-    margin: 6rem !important;
+    margin: 2rem !important;
+    box-sizing: content-box;
     width: 30%;
     height: 3rem;
 }
