@@ -53,7 +53,7 @@ class MyBD():
             with self.connection.cursor() as cursor:
 
                 self.insert_query = "SELECT * " \
-                                    "FROM `interviewer`;"
+                                    "FROM interviewer;"
 
                 cursor.execute(self.insert_query)
                 table = cursor.fetchall()

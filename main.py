@@ -1,10 +1,10 @@
-from flask import Flask, render_template, url_for, request, redirect, session, send_file, send_from_directory
+from flask import Flask, render_template, url_for, request, redirect, session, send_from_directory
 from first_power import laad_dotenv_first_power, load_dotenv_SK
 from control_BD import MyBD
 from hesh import get_hash
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = load_dotenv_SK()
-
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -22,7 +22,7 @@ def index():
             else:
                 return render_template('uthorized_error.html')
         except:
-                return render_template('uthorized_error.html')
+            return render_template('uthorized_error.html')
     else:
         if 'isAuthorized' in session and session['isAuthorized']:
             return render_template('index.html')
@@ -50,8 +50,6 @@ def quit():
 
 @app.route('/create-report/<report>')
 def get_report(report):
-    #report_file_pdf = 'reports/'+report
-    #print(report)
     return send_from_directory(directory='reports', path=report)
 
 @app.route('/create-test', methods=['POST', 'GET'])
@@ -59,10 +57,10 @@ def create_test():
     if request.method == "POST":
         title_test = request.form['input__title__create__quiz']
         description_test = request.form['input__description__create__quiz']
-        #session["curent_test"] = 1
+        # session["curent_test"] = 1
         isTitleInBD = my_bd.save_title_quiz(title_test, description_test, 'test')
-        #print(request.form.to_dict())
         if isTitleInBD:
+            # делаем запрос на ид викторины, потом в сесию присваиваем значение текущей викторины
             return redirect(url_for('questions_test_create', title_test=title_test, id=1))
         else:
             return render_template('create-quiz-error.html')
@@ -114,10 +112,9 @@ def questions_test_create(title_test, id):
                 id_question_from_data = int(key.split('/')[1])
 
 
-
         print(id_question_from_data, id_question)
         if id_question_from_data == id_question:
-            session['id_questions'] +=1
+            session['id_questions'] += 1
             print('Вопрос:', question_from_data)
             print('Закрытый:', is_closed_question_from_data)
             print('Один верный:', is_one_list_from_data)

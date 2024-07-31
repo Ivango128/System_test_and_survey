@@ -16,12 +16,12 @@
         <div class="block__answers">
             <div class="cont__for__answers">
             {% for interviewer in interviewers %}
-                <div class="input-group {{interviewer.idi_nterviewer}}">
+                <div class="input-group {{interviewer[0]}}">
                 <div class="input-group-text">
-                    <p class="number">{{interviewer.idi_nterviewer}}</p>
+                    <p class="number">{{interviewer[0]}}</p>
                 </div>
-                <input type="text" class="form-control" name="{{interviewer.idi_nterviewer}}" id="inter_{{interviewer.idi_nterviewer}}" value="{{interviewer.login}}">
-                <input type="text" class="form-control" name="{{interviewer.idi_nterviewer}}" id="inter_{{interviewer.idi_nterviewer}}" value="{{interviewer.password}}">
+                <input type="text" class="form-control" name="{{interviewer[0]}}" id="login/{{interviewer[0]}}" value="{{interviewer[1]}}">
+                <input type="text" class="form-control" name="{{interviewer[0]}}" id="password/{{interviewer[0]}}" value="{{interviewer[2]}}">
                 </div>
             {% endfor %}
             </div>
